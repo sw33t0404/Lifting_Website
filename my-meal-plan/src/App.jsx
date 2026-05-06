@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MealPlan from "./biweekly-meal-plan";
 import RecipeBook from "./performance-recipes";
 import WorkoutProgram from "./WorkoutProgram";
@@ -9,8 +9,25 @@ const DARK = "#0F1008";
 const MID = "#1C1E0F";
 const MUTED = "#8A8F6A";
 
+const VIEWS = ["plan", "recipes", "workout", "fastfood"];
+const getViewFromHash = () => {
+  const hash = window.location.hash.slice(1);
+  return VIEWS.includes(hash) ? hash : "plan";
+};
+
 export default function App() {
-  const [view, setView] = useState("plan");
+  const [view, setView] = useState(getViewFromHash);
+
+  useEffect(() => {
+    const onHashChange = () => setView(getViewFromHash());
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  const navigate = (key) => {
+    window.location.hash = key;
+    setView(key);
+  };
 
   return (
     <div style={{ background: DARK, minHeight: "100vh" }}>
@@ -29,7 +46,7 @@ export default function App() {
         ].map(({ key, label }) => (
           <button
             key={key}
-            onClick={() => setView(key)}
+            onClick={() => navigate(key)}
             style={{
               background: "transparent",
               border: "none",
