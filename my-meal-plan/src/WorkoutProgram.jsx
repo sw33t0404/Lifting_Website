@@ -435,23 +435,23 @@ const GUIDE_SECTIONS = [
 // ─── STYLES ──────────────────────────────────────────────────────────────────
 
 const C = {
-  bg: "#0e0f11",
-  surface: "#16181c",
-  surface2: "#1e2026",
-  border: "rgba(255,255,255,0.08)",
-  border2: "rgba(255,255,255,0.14)",
-  text: "#f0f0ee",
-  muted: "#8a8c92",
-  dim: "#4a4c52",
-  accent: "#c8f060",
-  accentDim: "rgba(200,240,96,0.12)",
-  accentBorder: "rgba(200,240,96,0.3)",
-  warn: "#f0a840",
-  warnDim: "rgba(240,168,64,0.1)",
-  warnBorder: "rgba(240,168,64,0.25)",
-  blue: "#60b8f0",
-  blueDim: "rgba(96,184,240,0.1)",
-  blueBorder: "rgba(96,184,240,0.3)",
+  bg: "#0F1008",
+  surface: "#1C1E0F",
+  surface2: "#181A0C",
+  border: "#2A2D18",
+  border2: "#3A3F20",
+  text: "#F5F5E8",
+  muted: "#8A8F6A",
+  dim: "#4A4F2A",
+  accent: "#E8FF47",
+  accentDim: "rgba(232,255,71,0.1)",
+  accentBorder: "rgba(232,255,71,0.3)",
+  warn: "#FF9A47",
+  warnDim: "rgba(255,154,71,0.1)",
+  warnBorder: "rgba(255,154,71,0.25)",
+  blue: "#47D4FF",
+  blueDim: "rgba(71,212,255,0.1)",
+  blueBorder: "rgba(71,212,255,0.3)",
 };
 
 const tagStyles = {
@@ -468,8 +468,8 @@ const numStyles = {
 
 const cardBg = {
   default: C.surface,
-  changed: `linear-gradient(135deg, ${C.surface} 0%, rgba(200,240,96,0.04) 100%)`,
-  new: `linear-gradient(135deg, ${C.surface} 0%, rgba(96,184,240,0.04) 100%)`,
+  changed: `linear-gradient(135deg, ${C.surface} 0%, rgba(232,255,71,0.04) 100%)`,
+  new: `linear-gradient(135deg, ${C.surface} 0%, rgba(71,212,255,0.04) 100%)`,
 };
 
 const cardBorder = {
@@ -498,7 +498,7 @@ function RirBadge({ rir }) {
         background: "rgba(167,140,240,0.12)",
         color: "#a78cf0",
         border: "1px solid rgba(167,140,240,0.3)",
-        fontFamily: "'DM Mono', monospace",
+        fontFamily: "'Space Mono', monospace",
       }}
     >
       {rir}
@@ -528,7 +528,7 @@ function ExCard({ ex, ssItem = false }) {
           alignItems: "center",
           justifyContent: "center",
           fontSize: 11,
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'Space Mono', monospace",
           flexShrink: 0,
           ...(ssItem ? numStyles.ss : numStyles[ex.variant || "default"]),
         }}
@@ -541,7 +541,7 @@ function ExCard({ ex, ssItem = false }) {
           <span
             style={{
               fontSize: 11,
-              fontFamily: "'DM Mono', monospace",
+              fontFamily: "'Space Mono', monospace",
               color: C.muted,
               background: C.surface2,
               padding: "2px 8px",
@@ -551,7 +551,7 @@ function ExCard({ ex, ssItem = false }) {
           >
             {ex.sets}
           </span>
-          <span style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: C.muted }}>
+          <span style={{ fontSize: 11, fontFamily: "'Space Mono', monospace", color: C.muted }}>
             {ex.reps}
           </span>
           {ex.rir && <RirBadge rir={ex.rir} />}
@@ -581,7 +581,7 @@ function SupersetGroup({ superset }) {
         style={{
           padding: "6px 14px",
           fontSize: 10,
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'Space Mono', monospace",
           color: C.warn,
           textTransform: "uppercase",
           letterSpacing: "0.08em",
@@ -652,7 +652,7 @@ function GuideCard({ section }) {
               padding: "8px 12px",
               fontSize: 12,
               color: C.text,
-              fontFamily: "'DM Mono', monospace",
+              fontFamily: "'Space Mono', monospace",
               lineHeight: 1.5,
               marginBottom: 10,
             }}
@@ -686,9 +686,24 @@ function GuideCard({ section }) {
 
 // ─── MAIN COMPONENT ──────────────────────────────────────────────────────────
 
+function useLocalStorage(key, init) {
+  const [v, sv] = useState(() => {
+    try { const s = localStorage.getItem(key); return s !== null ? JSON.parse(s) : init; }
+    catch { return init; }
+  });
+  const set = (next) => {
+    sv(prev => {
+      const val = typeof next === "function" ? next(prev) : next;
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+      return val;
+    });
+  };
+  return [v, set];
+}
+
 export default function WorkoutProgram() {
-  const [activeTab, setActiveTab] = useState("program");
-  const [activeDay, setActiveDay] = useState(0);
+  const [activeTab, setActiveTab] = useLocalStorage("wp-tab", "program");
+  const [activeDay, setActiveDay] = useLocalStorage("wp-day", 0);
   const navRef = useRef(null);
 
   useEffect(() => {
@@ -747,7 +762,7 @@ export default function WorkoutProgram() {
   return (
     <>
       <link
-        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet"
       />
       <div
@@ -770,7 +785,7 @@ export default function WorkoutProgram() {
             borderBottom: `1px solid ${C.border}`,
             position: "sticky",
             top: 0,
-            background: C.bg,
+            background: C.surface,
             zIndex: 100,
           }}
         >
@@ -833,7 +848,7 @@ export default function WorkoutProgram() {
             {/* Session header */}
             <div style={{ padding: "18px 16px 10px", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
               <div>
-                <div style={{ fontSize: 11, fontFamily: "'DM Mono', monospace", color: C.muted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>
+                <div style={{ fontSize: 11, fontFamily: "'Space Mono', monospace", color: C.muted, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 4 }}>
                   {day.label}
                 </div>
                 <div style={{ fontSize: 22, fontWeight: 600, letterSpacing: "-0.03em", lineHeight: 1.2, color: C.text }}>
@@ -846,7 +861,7 @@ export default function WorkoutProgram() {
                   fontSize: 11,
                   padding: "4px 10px",
                   borderRadius: 6,
-                  fontFamily: "'DM Mono', monospace",
+                  fontFamily: "'Space Mono', monospace",
                   marginTop: 4,
                   ...(day.badgeType === "ok"
                     ? { background: C.accentDim, color: C.accent, border: `1px solid ${C.accentBorder}` }
@@ -861,14 +876,14 @@ export default function WorkoutProgram() {
             <div style={{ display: "flex", gap: 8, padding: "0 16px 14px", overflowX: "auto", scrollbarWidth: "none" }}>
               {day.stats.map((s) => (
                 <div key={s.l} style={{ flexShrink: 0, background: C.surface, border: `1px solid ${C.border}`, borderRadius: 8, padding: "8px 12px", textAlign: "center" }}>
-                  <div style={{ fontSize: 16, fontWeight: 600, color: C.accent, fontFamily: "'DM Mono', monospace" }}>{s.v}</div>
+                  <div style={{ fontSize: 16, fontWeight: 600, color: C.accent, fontFamily: "'Space Mono', monospace" }}>{s.v}</div>
                   <div style={{ fontSize: 10, color: C.muted, marginTop: 1, textTransform: "uppercase", letterSpacing: "0.05em" }}>{s.l}</div>
                 </div>
               ))}
             </div>
 
             {/* Exercises label */}
-            <div style={{ fontSize: 10, fontFamily: "'DM Mono', monospace", color: C.dim, textTransform: "uppercase", letterSpacing: "0.1em", padding: "0 16px 8px" }}>
+            <div style={{ fontSize: 10, fontFamily: "'Space Mono', monospace", color: C.dim, textTransform: "uppercase", letterSpacing: "0.1em", padding: "0 16px 8px" }}>
               Exercises
             </div>
 

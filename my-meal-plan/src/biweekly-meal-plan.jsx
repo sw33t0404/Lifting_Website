@@ -1,5 +1,20 @@
 import { useState } from "react";
 
+function useLocalStorage(key, init) {
+  const [v, sv] = useState(() => {
+    try { const s = localStorage.getItem(key); return s !== null ? JSON.parse(s) : init; }
+    catch { return init; }
+  });
+  const set = (next) => {
+    sv(prev => {
+      const val = typeof next === "function" ? next(prev) : next;
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+      return val;
+    });
+  };
+  return [v, set];
+}
+
 const ACCENT = "#E8FF47";
 const DARK = "#0F1008";
 const MID = "#1C1E0F";
@@ -237,10 +252,13 @@ function DayCard({ day, isActive, onClick }) {
 }
 
 export default function MealPlan() {
-  const [week, setWeek] = useState("week1");
-  const [activeDay, setActiveDay] = useState(0);
-  const [tab, setTab] = useState("plan");
-  const [checkedItems, setCheckedItems] = useState({});
+  const [week, setWeek] = useLocalStorage("mp-week", "week1");
+  const [activeDay, setActiveDay] = useLocalStorage("mp-day", 0);
+  const [tab, setTab] = useLocalStorage("mp-tab", "plan");
+  const [checkedItems, setCheckedItems] = useLocalStorage("mp-checks", {});
+
+  const totalItems = Object.values(shoppingList).reduce((a, arr) => a + arr.length, 0);
+  const checkedCount = Object.values(checkedItems).filter(Boolean).length;
 
   const weekDays = meals[week];
   const day = weekDays[activeDay];
@@ -366,10 +384,23 @@ export default function MealPlan() {
 
         {tab === "shopping" && (
           <>
-            <div style={{ marginBottom: 16 }}>
-              <p style={{ color: MUTED, fontSize: 13, margin: "0 0 16px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <p style={{ color: MUTED, fontSize: 13, margin: 0, flex: 1 }}>
                 Everything you need for 14 days. Tick items as you add them to your basket.
               </p>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginLeft: 16, flexShrink: 0 }}>
+                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: checkedCount > 0 ? ACCENT : MUTED }}>
+                  {checkedCount}/{totalItems}
+                </span>
+                {checkedCount > 0 && (
+                  <button
+                    onClick={() => setCheckedItems({})}
+                    style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: MUTED, background: "transparent", border: "1px solid #2A2D18", borderRadius: 6, padding: "3px 10px", cursor: "pointer" }}
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
             </div>
             {Object.entries(shoppingList).map(([cat, items]) => (
               <div key={cat} style={{ marginBottom: 20 }}>

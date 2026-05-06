@@ -1,5 +1,20 @@
 import { useState } from "react";
 
+function useLocalStorage(key, init) {
+  const [v, sv] = useState(() => {
+    try { const s = localStorage.getItem(key); return s !== null ? JSON.parse(s) : init; }
+    catch { return init; }
+  });
+  const set = (next) => {
+    sv(prev => {
+      const val = typeof next === "function" ? next(prev) : next;
+      try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
+      return val;
+    });
+  };
+  return [v, set];
+}
+
 const ACCENT = "#E8FF47";
 const DARK = "#0F1008";
 const MID = "#1C1E0F";
@@ -880,7 +895,7 @@ function RecipeDetail({ recipe, onBack }) {
 }
 
 export default function RecipeBook() {
-  const [activeCat, setActiveCat] = useState("All");
+  const [activeCat, setActiveCat] = useLocalStorage("rb-cat", "All");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState(null);
 
