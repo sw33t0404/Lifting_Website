@@ -603,7 +603,7 @@ export default function FastFoodGuide() {
     const params = new URLSearchParams({
       api_key: USDA_KEY,
       query: debouncedFdc,
-      dataType: "Branded",
+      dataType: "SR Legacy,Branded",
       pageSize: 10,
       sortBy: "score",
       sortOrder: "desc",
