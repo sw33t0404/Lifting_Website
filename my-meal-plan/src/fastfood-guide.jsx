@@ -2,26 +2,29 @@ import { useState, useRef, useEffect, useCallback } from "react";
 
 // ─── THEME ───────────────────────────────────────────────────────────────────
 const T = {
-  bg:      "#0F1008",
-  surface: "#1C1E0F",
-  card:    "#181A0C",
-  border:  "#2A2D18",
-  muted:   "#8A8F6A",
-  white:   "#F5F5E8",
-  lime:    "#E8FF47",
-  green:   "#7EFF9A",
-  orange:  "#FF9A47",
-  blue:    "#47D4FF",
+  bg:      "#090A06",
+  surface: "#111309",
+  card:    "#161810",
+  border:  "#252718",
+  muted:   "#6B7050",
+  white:   "#F0F1E6",
+  lime:    "#D8FF47",
+  green:   "#5BF599",
+  orange:  "#FF8C42",
+  blue:    "#47C8FF",
   red:     "#FF5C5C",
   purple:  "#C8A8FF",
 };
 
-// ─── NUTRITIONIX CONFIG ───────────────────────────────────────────────────────
-// Replace these with your own keys from https://developer.nutritionix.com/
-// Free tier: 500 API calls/day — more than enough for personal use
-const NIX_APP_ID  = "YOUR_APP_ID";
-const NIX_APP_KEY = "YOUR_APP_KEY";
-const NIX_BASE    = "https://trackapi.nutritionix.com/v2";
+// ─── USDA FOODDATA CENTRAL CONFIG ────────────────────────────────────────────
+// Completely free, no usage limits, government-verified data (380k+ foods).
+// Get a free key in ~30 seconds — no credit card, no approval:
+//   1. Go to https://fdc.nal.usda.gov/api-key-signup
+//   2. Enter your email — key arrives instantly
+//   3. Paste it below and you're done.
+// DEMO_KEY works while you're setting up (~3,000 req/hour per IP, shared limit).
+const USDA_KEY  = import.meta.env.VITE_USDA_KEY || "DEMO_KEY";
+const USDA_BASE = "https://api.nal.usda.gov/fdc/v1";
 
 // ─── MODE CONFIG ─────────────────────────────────────────────────────────────
 const MODE_CONFIG = {
@@ -404,7 +407,7 @@ function useDebounce(value, delay) {
 // ─── SUB-COMPONENTS ──────────────────────────────────────────────────────────
 function MacroPill({ label, val, color }) {
   return (
-    <span style={{ background: `${color}18`, color, border: `1px solid ${color}38`, borderRadius: 20, padding: "2px 9px", fontSize: 11, fontFamily: "'Space Mono', monospace" }}>
+    <span style={{ background: `${color}18`, color, border: `1px solid ${color}38`, borderRadius: 20, padding: "2px 9px", fontSize: 11, fontFamily: "'Martian Mono', monospace" }}>
       {label} {val}g
     </span>
   );
@@ -425,7 +428,7 @@ function ProteinBar({ grams, goal = 148 }) {
   const color = pct >= 30 ? T.green : pct >= 20 ? T.lime : T.orange;
   return (
     <div style={{ marginTop: 8 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, fontSize: 10, color: T.muted, fontFamily: "'Space Mono', monospace" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4, fontSize: 10, color: T.muted, fontFamily: "'Martian Mono', monospace" }}>
         <span>{grams}g protein</span>
         <span>{pct}% of daily {goal}g target</span>
       </div>
@@ -440,7 +443,7 @@ function EfficiencyBadge({ item }) {
   const eff = parseFloat(efficiency(item));
   const color = eff >= 7 ? T.green : eff >= 4.5 ? T.lime : eff >= 3 ? T.orange : T.muted;
   return (
-    <span style={{ fontSize: 10, padding: "1px 7px", borderRadius: 4, background: `${color}15`, color, border: `1px solid ${color}35`, fontFamily: "'Space Mono', monospace" }}>
+    <span style={{ fontSize: 10, padding: "1px 7px", borderRadius: 4, background: `${color}15`, color, border: `1px solid ${color}35`, fontFamily: "'Martian Mono', monospace" }}>
       {eff}g P/100kcal
     </span>
   );
@@ -469,11 +472,11 @@ function ItemCard({ item, mode, onLog }) {
             </div>
           </div>
           <div style={{ textAlign: "right", flexShrink: 0 }}>
-            <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 17, fontWeight: 700, color, lineHeight: 1 }}>{item.kcal}</div>
-            <div style={{ fontSize: 9, color: T.muted, fontFamily: "'Space Mono', monospace", marginBottom: 4 }}>kcal</div>
+            <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: 17, fontWeight: 700, color, lineHeight: 1 }}>{item.kcal}</div>
+            <div style={{ fontSize: 9, color: T.muted, fontFamily: "'Martian Mono', monospace", marginBottom: 4 }}>kcal</div>
             {item.rating && <RatingDots r={item.rating} color={color} />}
             {isWorkout && item.timing && (
-              <div style={{ fontSize: 10, color, fontFamily: "'Space Mono', monospace", marginTop: 5 }}>{item.timing}</div>
+              <div style={{ fontSize: 10, color, fontFamily: "'Martian Mono', monospace", marginTop: 5 }}>{item.timing}</div>
             )}
           </div>
         </div>
@@ -485,11 +488,11 @@ function ItemCard({ item, mode, onLog }) {
           {isWorkout ? (
             <>
               <p style={{ fontSize: 12.5, color: T.muted, margin: "0 0 9px", lineHeight: 1.65 }}>
-                <span style={{ color, fontFamily: "'Space Mono', monospace", fontSize: 10, marginRight: 4 }}>WHY</span>
+                <span style={{ color, fontFamily: "'Martian Mono', monospace", fontSize: 10, marginRight: 4 }}>WHY</span>
                 {item.why}
               </p>
               <div style={{ background: `${color}10`, border: `1px solid ${color}30`, borderRadius: 8, padding: "8px 12px", marginBottom: 8 }}>
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color }}>ORDER → </span>
+                <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: 10, color }}>ORDER → </span>
                 <span style={{ fontSize: 12, color: T.white }}>{item.order}</span>
               </div>
             </>
@@ -497,7 +500,7 @@ function ItemCard({ item, mode, onLog }) {
             <>
               <p style={{ fontSize: 12.5, color: T.muted, margin: "0 0 9px", lineHeight: 1.65 }}>{item.tip}</p>
               <div style={{ background: `${T.red}10`, border: `1px solid ${T.red}30`, borderRadius: 8, padding: "8px 12px", marginBottom: 8 }}>
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: T.red }}>⚠ </span>
+                <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: 10, color: T.red }}>⚠ </span>
                 <span style={{ fontSize: 12, color: T.white }}>{item.damage}</span>
               </div>
             </>
@@ -505,14 +508,14 @@ function ItemCard({ item, mode, onLog }) {
             <>
               <p style={{ fontSize: 12.5, color: T.muted, margin: "0 0 9px", lineHeight: 1.65 }}>{item.tip}</p>
               <div style={{ background: `${color}10`, border: `1px solid ${color}30`, borderRadius: 8, padding: "8px 12px", marginBottom: 8 }}>
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color }}>ORDER → </span>
+                <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: 10, color }}>ORDER → </span>
                 <span style={{ fontSize: 12, color: T.white }}>{item.order}</span>
               </div>
             </>
           )}
           <button
             onClick={(e) => { e.stopPropagation(); onLog(item); }}
-            style={{ background: `${T.lime}15`, border: `1px solid ${T.lime}40`, borderRadius: 6, padding: "5px 12px", fontSize: 11, color: T.lime, cursor: "pointer", fontFamily: "'Space Mono', monospace" }}
+            style={{ background: `${T.lime}15`, border: `1px solid ${T.lime}40`, borderRadius: 6, padding: "5px 12px", fontSize: 11, color: T.lime, cursor: "pointer", fontFamily: "'Martian Mono', monospace" }}
           >
             + Log this meal
           </button>
@@ -522,30 +525,42 @@ function ItemCard({ item, mode, onLog }) {
   );
 }
 
-// Live search result card (from Nutritionix)
-function NixResultCard({ item, onLog }) {
+// Live search result card (from USDA FoodData Central)
+function FdcResultCard({ item, onLog }) {
+  // Extract macros from the nutrients array
+  const getNutrient = (id) => {
+    const n = (item.foodNutrients || []).find(n => n.nutrientId === id || n.nutrientNumber === String(id));
+    return Math.round(n ? (n.value || 0) : 0);
+  };
+  const kcal = getNutrient(1008) || getNutrient(2047);
+  const prot = getNutrient(1003);
+  const carb = getNutrient(1005);
+  const fat  = getNutrient(1004);
+  const servingSize = item.servingSize ? `${item.servingSize}${item.servingSizeUnit || "g"}` : "";
   return (
     <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 12, padding: "12px 14px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 8, marginBottom: 8 }}>
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, color: T.white, marginBottom: 4, lineHeight: 1.3 }}>{item.food_name}</div>
-          <div style={{ fontSize: 11, color: T.muted, marginBottom: 6 }}>{item.brand_name || "Generic"} · {item.serving_qty} {item.serving_unit}</div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: T.white, marginBottom: 4, lineHeight: 1.3 }}>{item.description}</div>
+          <div style={{ fontSize: 11, color: T.muted, marginBottom: 6 }}>
+            {item.brandName || item.brandOwner || "USDA"}{servingSize ? ` · ${servingSize}` : ""}
+          </div>
           <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-            <MacroPill label="P" val={Math.round(item.nf_protein || 0)} color={T.lime} />
-            <MacroPill label="C" val={Math.round(item.nf_total_carbohydrate || 0)} color={T.green} />
-            <MacroPill label="F" val={Math.round(item.nf_total_fat || 0)} color={T.orange} />
-            <EfficiencyBadge item={{ p: item.nf_protein || 0, kcal: item.nf_calories || 1 }} />
+            <MacroPill label="P" val={prot} color={T.lime} />
+            <MacroPill label="C" val={carb} color={T.green} />
+            <MacroPill label="F" val={fat} color={T.orange} />
+            <EfficiencyBadge item={{ p: prot, kcal: kcal || 1 }} />
           </div>
         </div>
         <div style={{ textAlign: "right", flexShrink: 0 }}>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 17, fontWeight: 700, color: T.blue }}>{Math.round(item.nf_calories || 0)}</div>
-          <div style={{ fontSize: 9, color: T.muted, fontFamily: "'Space Mono', monospace" }}>kcal</div>
+          <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: 17, fontWeight: 700, color: T.blue }}>{kcal}</div>
+          <div style={{ fontSize: 9, color: T.muted, fontFamily: "'Martian Mono', monospace" }}>kcal</div>
         </div>
       </div>
-      <ProteinBar grams={Math.round(item.nf_protein || 0)} />
+      <ProteinBar grams={prot} />
       <button
-        onClick={() => onLog({ name: item.food_name, p: Math.round(item.nf_protein || 0), c: Math.round(item.nf_total_carbohydrate || 0), f: Math.round(item.nf_total_fat || 0), kcal: Math.round(item.nf_calories || 0) })}
-        style={{ marginTop: 8, background: `${T.blue}15`, border: `1px solid ${T.blue}40`, borderRadius: 6, padding: "5px 12px", fontSize: 11, color: T.blue, cursor: "pointer", fontFamily: "'Space Mono', monospace" }}
+        onClick={() => onLog({ name: item.description, p: prot, c: carb, f: fat, kcal })}
+        style={{ marginTop: 8, background: `${T.blue}15`, border: `1px solid ${T.blue}40`, borderRadius: 6, padding: "5px 12px", fontSize: 11, color: T.blue, cursor: "pointer", fontFamily: "'Martian Mono', monospace" }}
       >
         + Log this meal
       </button>
@@ -554,36 +569,20 @@ function NixResultCard({ item, onLog }) {
 }
 
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
-
-function useLocalStorage(key, init) {
-  const [v, sv] = useState(() => {
-    try { const s = localStorage.getItem(key); return s !== null ? JSON.parse(s) : init; }
-    catch { return init; }
-  });
-  const set = (next) => {
-    sv(prev => {
-      const val = typeof next === "function" ? next(prev) : next;
-      try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
-      return val;
-    });
-  };
-  return [v, set];
-}
-
 export default function FastFoodGuide() {
-  const [mode, setMode]               = useLocalStorage("ff-mode", "onTrack");
-  const [activeChain, setActiveChain] = useLocalStorage("ff-chain", "all");
-  const [loggedMeals, setLoggedMeals] = useLocalStorage("ff-log", []);
+  const [mode, setMode]               = useState("onTrack");
+  const [activeChain, setActiveChain] = useState("all");
   const [searchQ, setSearchQ]         = useState("");
-  const [nixQuery, setNixQuery]       = useState("");
-  const [nixResults, setNixResults]   = useState([]);
-  const [nixLoading, setNixLoading]   = useState(false);
-  const [nixError, setNixError]       = useState("");
+  const [fdcQuery, setFdcQuery]       = useState("");
+  const [fdcResults, setFdcResults]   = useState([]);
+  const [fdcLoading, setFdcLoading]   = useState(false);
+  const [fdcError, setFdcError]       = useState("");
+  const [loggedMeals, setLoggedMeals] = useState([]);
   const [showLog, setShowLog]         = useState(false);
   const [activeTab, setActiveTab]     = useState("guide"); // "guide" | "search"
 
   const cfg = MODE_CONFIG[mode];
-  const debouncedNix = useDebounce(nixQuery, 600);
+  const debouncedFdc = useDebounce(fdcQuery, 600);
 
   // All items flat for in-app search
   const allItems = chains.flatMap(c =>
@@ -596,27 +595,34 @@ export default function FastFoodGuide() {
     ? allItems.filter(i => i.name.toLowerCase().includes(searchQ.toLowerCase()) || i.chain.toLowerCase().includes(searchQ.toLowerCase()))
     : [];
 
-  // Nutritionix live search
+  // USDA FoodData Central live search
   useEffect(() => {
-    if (!debouncedNix || debouncedNix.length < 3) { setNixResults([]); return; }
-    const hasRealKeys = NIX_APP_ID !== "YOUR_APP_ID" && NIX_APP_KEY !== "YOUR_APP_KEY";
-    if (!hasRealKeys) {
-      setNixError("Add your Nutritionix API keys in the config at the top of this file to enable live search. Free tier at developer.nutritionix.com.");
-      return;
-    }
-    setNixLoading(true);
-    setNixError("");
-    fetch(`${NIX_BASE}/search/instant?query=${encodeURIComponent(debouncedNix)}&branded=true&self=false&detailed=true`, {
-      headers: { "x-app-id": NIX_APP_ID, "x-app-key": NIX_APP_KEY },
-    })
-      .then(r => r.json())
+    if (!debouncedFdc || debouncedFdc.length < 3) { setFdcResults([]); return; }
+    setFdcLoading(true);
+    setFdcError("");
+    const params = new URLSearchParams({
+      api_key: USDA_KEY,
+      query: debouncedFdc,
+      dataType: "Branded",
+      pageSize: 10,
+      sortBy: "score",
+      sortOrder: "desc",
+    });
+    fetch(`${USDA_BASE}/foods/search?${params}`)
+      .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(data => {
-        const branded = (data.branded || []).slice(0, 8);
-        setNixResults(branded);
-        setNixLoading(false);
+        setFdcResults((data.foods || []).slice(0, 8));
+        setFdcLoading(false);
       })
-      .catch(() => { setNixError("Search failed — check your API keys and network."); setNixLoading(false); });
-  }, [debouncedNix]);
+      .catch(err => {
+        if (String(err).includes("429")) {
+          setFdcError("Rate limit hit on DEMO_KEY. Sign up for a free personal key at fdc.nal.usda.gov/api-key-signup — takes 30 seconds.");
+        } else {
+          setFdcError("Search failed — check your network connection.");
+        }
+        setFdcLoading(false);
+      });
+  }, [debouncedFdc]);
 
   const logMeal = useCallback((item) => {
     setLoggedMeals(prev => [...prev, { ...item, id: Date.now() }]);
@@ -634,13 +640,13 @@ export default function FastFoodGuide() {
       padding: "7px 16px", borderRadius: 20, border: `1px solid ${activeTab === id ? cfg.color : T.border}`,
       background: activeTab === id ? `${cfg.color}15` : "transparent",
       color: activeTab === id ? cfg.color : T.muted,
-      fontFamily: "'Space Mono', monospace", fontSize: 10, cursor: "pointer", transition: "all 0.18s",
+      fontFamily: "'Martian Mono', monospace", fontSize: 10, cursor: "pointer", transition: "all 0.18s",
     }}>{label}</button>
   );
 
   return (
     <div style={{ background: T.bg, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif", color: T.white }}>
-      <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
       {/* ── HEADER ── */}
       <div style={{ background: T.surface, borderBottom: `1px solid ${T.border}`, padding: "16px 20px 0", position: "sticky", top: 0, zIndex: 100 }}>
@@ -648,18 +654,18 @@ export default function FastFoodGuide() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
             <div>
               <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 18, fontWeight: 700, color: T.lime }}>FAST FOOD</span>
-                <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 18, fontWeight: 700, color: T.white }}>GUIDE</span>
+                <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: 18, fontWeight: 700, color: T.lime }}>FAST FOOD</span>
+                <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: 18, fontWeight: 700, color: T.white }}>GUIDE</span>
               </div>
-              <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>8 US chains · May 2026 · Nutritionix live search</div>
+              <div style={{ fontSize: 11, color: T.muted, marginTop: 2 }}>8 US chains · May 2026 · USDA FoodData Central live search</div>
             </div>
             {/* Protein log summary */}
             <button
               onClick={() => setShowLog(!showLog)}
               style={{ background: `${T.lime}12`, border: `1px solid ${T.lime}30`, borderRadius: 8, padding: "6px 12px", cursor: "pointer", textAlign: "right" }}
             >
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 14, fontWeight: 700, color: T.lime }}>{totalLogged.p}g</div>
-              <div style={{ fontSize: 9, color: T.muted, fontFamily: "'Space Mono', monospace" }}>/ 148g protein</div>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: 14, fontWeight: 700, color: T.lime }}>{totalLogged.p}g</div>
+              <div style={{ fontSize: 9, color: T.muted, fontFamily: "'Martian Mono', monospace" }}>/ 148g protein</div>
             </button>
           </div>
 
@@ -675,7 +681,7 @@ export default function FastFoodGuide() {
                 flex: 1, padding: "7px 2px", borderRadius: 8, border: "none",
                 background: mode === key ? val.color : "transparent",
                 color: mode === key ? T.bg : T.muted,
-                fontFamily: "'Space Mono', monospace", fontSize: 9, fontWeight: 700,
+                fontFamily: "'Martian Mono', monospace", fontSize: 9, fontWeight: 700,
                 cursor: "pointer", transition: "all 0.18s", whiteSpace: "nowrap", letterSpacing: 0.1,
               }}>{val.label}</button>
             ))}
@@ -697,7 +703,7 @@ export default function FastFoodGuide() {
         <div style={{ background: T.card, border: `1px solid ${T.border}`, borderBottom: `1px solid ${T.lime}22`, padding: "12px 20px" }}>
           <div style={{ maxWidth: 720, margin: "0 auto" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-              <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: T.lime }}>◆ MEAL LOG</span>
+              <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: 10, color: T.lime }}>◆ MEAL LOG</span>
               <button onClick={() => setLoggedMeals([])} style={{ fontSize: 10, color: T.muted, background: "none", border: "none", cursor: "pointer" }}>Clear all</button>
             </div>
             {loggedMeals.length === 0 ? (
@@ -705,7 +711,7 @@ export default function FastFoodGuide() {
             ) : loggedMeals.map((m, i) => (
               <div key={m.id} style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", borderBottom: i < loggedMeals.length - 1 ? `1px solid ${T.border}` : "none" }}>
                 <span style={{ fontSize: 12, color: T.white, flex: 1 }}>{m.name}</span>
-                <span style={{ fontSize: 11, color: T.lime, fontFamily: "'Space Mono', monospace", marginLeft: 10 }}>{m.p}g P · {m.kcal} kcal</span>
+                <span style={{ fontSize: 11, color: T.lime, fontFamily: "'Martian Mono', monospace", marginLeft: 10 }}>{m.p}g P · {m.kcal} kcal</span>
                 <button onClick={() => setLoggedMeals(prev => prev.filter(x => x.id !== m.id))} style={{ fontSize: 11, color: T.muted, background: "none", border: "none", cursor: "pointer", marginLeft: 8 }}>✕</button>
               </div>
             ))}
@@ -735,7 +741,7 @@ export default function FastFoodGuide() {
             {/* Search results */}
             {searchQ.trim().length > 1 && (
               <div style={{ marginBottom: 16 }}>
-                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: cfg.color, marginBottom: 8 }}>
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: 10, color: cfg.color, marginBottom: 8 }}>
                   ◆ SEARCH RESULTS ({modeFilteredItems.length} items in {MODE_CONFIG[mode].label} mode)
                 </div>
                 {modeFilteredItems.length === 0 ? (
@@ -744,7 +750,7 @@ export default function FastFoodGuide() {
                   <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
                     {modeFilteredItems.map((item, i) => (
                       <div key={i}>
-                        <div style={{ fontSize: 10, color: T.muted, fontFamily: "'Space Mono', monospace", marginBottom: 4 }}>{item.chainEmoji} {item.chain}</div>
+                        <div style={{ fontSize: 10, color: T.muted, fontFamily: "'Martian Mono', monospace", marginBottom: 4 }}>{item.chainEmoji} {item.chain}</div>
                         <ItemCard item={item} mode={item.mode} onLog={logMeal} />
                       </div>
                     ))}
@@ -762,7 +768,7 @@ export default function FastFoodGuide() {
                     border: `1px solid ${activeChain === c.id ? cfg.color : T.border}`,
                     background: activeChain === c.id ? `${cfg.color}15` : "transparent",
                     color: activeChain === c.id ? cfg.color : T.muted,
-                    fontFamily: "'Space Mono', monospace", fontSize: 10, cursor: "pointer", transition: "all 0.18s",
+                    fontFamily: "'Martian Mono', monospace", fontSize: 10, cursor: "pointer", transition: "all 0.18s",
                   }}>{c.emoji} {c.name}</button>
                 ))}
               </div>
@@ -771,7 +777,7 @@ export default function FastFoodGuide() {
             {/* Top picks */}
             {activeChain === "all" && !searchQ.trim() && (
               <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: "14px 16px", marginBottom: 16 }}>
-                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: cfg.color, marginBottom: 10, letterSpacing: 1 }}>◆ TOP PICKS</div>
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: 10, color: cfg.color, marginBottom: 10, letterSpacing: 1 }}>◆ TOP PICKS</div>
                 {(highlights[mode] || []).map((p, i) => (
                   <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "7px 0", borderBottom: i < 2 ? `1px solid ${T.border}` : "none" }}>
                     <div style={{ flex: 1 }}>
@@ -779,8 +785,8 @@ export default function FastFoodGuide() {
                       <span style={{ fontSize: 12, color: T.muted }}> · {p.item}</span>
                     </div>
                     <div style={{ display: "flex", gap: 8, alignItems: "center", flexShrink: 0, marginLeft: 8 }}>
-                      <span style={{ fontSize: 10, color: cfg.color, background: `${cfg.color}15`, border: `1px solid ${cfg.color}30`, borderRadius: 20, padding: "2px 8px", fontFamily: "'Space Mono', monospace" }}>{p.badge}</span>
-                      <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: T.lime, flexShrink: 0 }}>{p.p}g P</span>
+                      <span style={{ fontSize: 10, color: cfg.color, background: `${cfg.color}15`, border: `1px solid ${cfg.color}30`, borderRadius: 20, padding: "2px 8px", fontFamily: "'Martian Mono', monospace" }}>{p.badge}</span>
+                      <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: 11, color: T.lime, flexShrink: 0 }}>{p.p}g P</span>
                     </div>
                   </div>
                 ))}
@@ -790,7 +796,7 @@ export default function FastFoodGuide() {
             {/* Mode tips */}
             {!searchQ.trim() && (
               <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: "14px 16px", marginBottom: 18 }}>
-                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: cfg.color, marginBottom: 10, letterSpacing: 1 }}>
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: 10, color: cfg.color, marginBottom: 10, letterSpacing: 1 }}>
                   {mode === "pre" ? "⚡ PRE-WORKOUT RULES" : mode === "post" ? "🔄 POST-WORKOUT RULES" : mode === "cheat" ? "🔥 CHEAT MEAL STRATEGY" : "🎯 ON-TRACK RULES"}
                 </div>
                 {(modeTips[mode] || []).map((tip, i) => (
@@ -810,7 +816,7 @@ export default function FastFoodGuide() {
                 <div key={chain.id} style={{ marginBottom: 24 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
                     <span style={{ fontSize: 20 }}>{chain.emoji}</span>
-                    <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 13, fontWeight: 700, color: T.white }}>{chain.name}</span>
+                    <span style={{ fontFamily: "'Martian Mono', monospace", fontSize: 13, fontWeight: 700, color: T.white }}>{chain.name}</span>
                     <div style={{ height: 1, flex: 1, background: T.border }} />
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
@@ -826,14 +832,16 @@ export default function FastFoodGuide() {
         {activeTab === "search" && (
           <>
             <div style={{ background: T.card, border: `1px solid ${T.blue}30`, borderRadius: 12, padding: "12px 14px", marginBottom: 14 }}>
-              <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: T.blue, marginBottom: 6 }}>◆ NUTRITIONIX LIVE SEARCH</div>
+              <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: 10, color: T.blue, marginBottom: 6 }}>◆ USDA FOODDATA CENTRAL — LIVE SEARCH</div>
               <p style={{ fontSize: 12, color: T.muted, margin: 0, lineHeight: 1.6 }}>
-                Search any restaurant item by name — macros pulled live from Nutritionix's verified database of 800+ chains. Add your API keys (free at developer.nutritionix.com) to activate.
+                Search 380,000+ foods from the USDA's government-verified database — including branded fast food items.
+                Completely free, no credit card. Replace <code style={{ color: T.lime, fontSize: 11 }}>DEMO_KEY</code> at the top of this file with your personal key from{" "}
+                <a href="https://fdc.nal.usda.gov/api-key-signup" target="_blank" rel="noreferrer" style={{ color: T.blue }}>fdc.nal.usda.gov/api-key-signup</a> for higher rate limits.
               </p>
             </div>
             <input
-              value={nixQuery}
-              onChange={e => setNixQuery(e.target.value)}
+              value={fdcQuery}
+              onChange={e => setFdcQuery(e.target.value)}
               placeholder="e.g. McDonald's McDouble, Chipotle chicken bowl…"
               style={{
                 width: "100%", background: T.card, border: `1px solid ${T.blue}50`, borderRadius: 10,
@@ -841,21 +849,21 @@ export default function FastFoodGuide() {
                 outline: "none", boxSizing: "border-box", marginBottom: 14,
               }}
             />
-            {nixLoading && (
-              <div style={{ textAlign: "center", padding: "20px 0", color: T.muted, fontFamily: "'Space Mono', monospace", fontSize: 11 }}>Searching Nutritionix…</div>
+            {fdcLoading && (
+              <div style={{ textAlign: "center", padding: "20px 0", color: T.muted, fontFamily: "'Martian Mono', monospace", fontSize: 11 }}>Searching USDA database…</div>
             )}
-            {nixError && (
+            {fdcError && (
               <div style={{ background: `${T.orange}10`, border: `1px solid ${T.orange}30`, borderRadius: 10, padding: "12px 14px", fontSize: 12, color: T.orange, lineHeight: 1.6, marginBottom: 14 }}>
-                {nixError}
+                {fdcError}
               </div>
             )}
-            {!nixLoading && nixResults.length > 0 && (
+            {!fdcLoading && fdcResults.length > 0 && (
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: T.blue, marginBottom: 4 }}>◆ {nixResults.length} RESULTS — LIVE DATA</div>
-                {nixResults.map((item, i) => <NixResultCard key={i} item={item} onLog={logMeal} />)}
+                <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: 10, color: T.blue, marginBottom: 4 }}>◆ {fdcResults.length} RESULTS — USDA VERIFIED DATA</div>
+                {fdcResults.map((item, i) => <FdcResultCard key={i} item={item} onLog={logMeal} />)}
               </div>
             )}
-            {!nixLoading && !nixError && nixQuery.length > 2 && nixResults.length === 0 && (
+            {!fdcLoading && !fdcError && fdcQuery.length > 2 && fdcResults.length === 0 && (
               <div style={{ fontSize: 12, color: T.muted, textAlign: "center", padding: "20px 0" }}>No results found — try a different search term.</div>
             )}
           </>
@@ -863,9 +871,9 @@ export default function FastFoodGuide() {
 
         {/* Footer */}
         <div style={{ background: T.surface, border: `1px solid ${T.lime}22`, borderRadius: 12, padding: "13px 16px", marginTop: 8 }}>
-          <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 10, color: T.lime, marginBottom: 5 }}>◆ DATA NOTE</div>
+          <div style={{ fontFamily: "'Martian Mono', monospace", fontSize: 10, color: T.lime, marginBottom: 5 }}>◆ DATA NOTE</div>
           <p style={{ fontSize: 12, color: T.muted, margin: 0, lineHeight: 1.7 }}>
-            Curated items verified against official 2026 restaurant sources. Live search powered by Nutritionix (800+ chains, updated continuously). McDonald's grilled chicken sandwich confirmed discontinued. Macros are approximate and vary slightly by location. No chunky tomato options appear in any recommendation. Daily protein target of 148g based on 2.0g/kg at 74kg per Mănescu et al. (2025).
+            Curated items verified against official 2026 restaurant sources. Live search powered by USDA FoodData Central — free, government-verified, 380,000+ foods including branded fast food items, updated quarterly. McDonald's grilled chicken sandwich confirmed discontinued. Macros are approximate and vary slightly by location. No chunky tomato options appear in any recommendation. Daily protein target of 148g based on 2.0g/kg at 74kg per Mănescu et al. (2025).
           </p>
         </div>
       </div>
