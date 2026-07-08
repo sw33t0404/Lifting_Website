@@ -3,13 +3,14 @@ import MealPlan from "./biweekly-meal-plan";
 import RecipeBook from "./performance-recipes";
 import WorkoutProgram from "./WorkoutProgram";
 import FastFoodGuide from "./fastfood-guide";
+import MachineSplit3Day from "./MachineSplit3Day";
 
 const ACCENT = "#E8FF47";
 const DARK = "#0F1008";
 const MID = "#1C1E0F";
 const MUTED = "#8A8F6A";
 
-const VIEWS = ["plan", "recipes", "workout", "fastfood"];
+const VIEWS = ["plan", "recipes", "workout", "fastfood", "machine"];
 const getViewFromHash = () => {
   const hash = window.location.hash.slice(1);
   return VIEWS.includes(hash) ? hash : "plan";
@@ -37,12 +38,15 @@ export default function App() {
         display: "flex",
         justifyContent: "center",
         padding: "0 24px",
+        overflowX: "auto",
+        scrollbarWidth: "none",
       }}>
         {[
           { key: "plan", label: "MEAL PLAN" },
           { key: "recipes", label: "RECIPES" },
           { key: "workout", label: "WORKOUT" },
           { key: "fastfood", label: "FAST FOOD" },
+          { key: "machine", label: "MACHINE" },
         ].map(({ key, label }) => (
           <button
             key={key}
@@ -69,6 +73,7 @@ export default function App() {
       {view === "recipes" && <RecipeBook />}
       {view === "workout" && <WorkoutProgram />}
       {view === "fastfood" && <FastFoodGuide />}
+      {view === "machine" && <MachineSplit3Day />}
     </div>
   );
 }
