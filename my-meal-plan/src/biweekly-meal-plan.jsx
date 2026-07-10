@@ -22,7 +22,7 @@ const CARD = "#181A0C";
 const MUTED = "#8A8F6A";
 const WHITE = "#F5F5E8";
 
-const macroTarget = { kcal: 2900, protein: 182, carbs: 399, fat: 64 };
+const macroTarget = { kcal: 2900, protein: 148, carbs: 430, fat: 64 };
 
 const meals = {
   week1: [
@@ -281,7 +281,7 @@ export default function MealPlan() {
             <h1 style={{ fontFamily: "'Space Mono', monospace", fontSize: 22, fontWeight: 700, color: WHITE, margin: 0 }}>PERFORMANCE PLAN</h1>
           </div>
           <p style={{ color: MUTED, fontSize: 13, margin: "6px 0 16px", letterSpacing: 0.3 }}>
-            ~2,900 kcal · 182g protein · 399g carbs · 64g fat — athletic performance macro split
+            ~2,900 kcal · 148g protein · 430g carbs · 64g fat — 2.0g/kg protein for aesthetics + performance
           </p>
           {/* Tab switcher */}
           <div style={{ display: "flex", gap: 8 }}>
@@ -449,7 +449,7 @@ export default function MealPlan() {
             <div style={{ background: "#1A1C0F", border: `1px solid ${ACCENT}22`, borderRadius: 12, padding: "14px 18px", marginTop: 8 }}>
               <div style={{ fontFamily: "'Space Mono', monospace", fontSize: 11, color: ACCENT, marginBottom: 6 }}>📌 NOTE</div>
               <p style={{ fontSize: 13, color: MUTED, margin: 0, lineHeight: 1.7 }}>
-                All tomato-based sauces use <strong style={{ color: WHITE }}>passata or tomato paste only</strong> — no whole or chunky tomatoes. Protein intake is set at ~1.6–2g/kg for a ~90kg athlete, consistent with ACSM recommendations for athletic performance. Adjust quantities if your bodyweight differs significantly.
+                All tomato-based sauces use <strong style={{ color: WHITE }}>passata or tomato paste only</strong> — no whole or chunky tomatoes. Protein is set at <strong style={{ color: WHITE }}>2.0 g/kg (~148g at 74kg)</strong> — the evidence-backed optimum for hypertrophy, with ~163g (2.2 g/kg) as a reasonable upper ceiling. Adjust quantities if your bodyweight differs significantly.
               </p>
             </div>
           </>

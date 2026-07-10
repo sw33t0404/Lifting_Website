@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import MachineSplit3Day from "./MachineSplit3Day";
+import MorningMobilityFlow from "./MorningMobilityFlow";
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -793,12 +795,18 @@ export default function WorkoutProgram() {
             Summer Aesthetic Program
           </h1>
           {/* Top-level tabs */}
-          <div style={{ display: "flex", gap: 6 }}>
+          <div style={{ display: "flex", gap: 6, overflowX: "auto", scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}>
             <button style={tabStyle("program")} onClick={() => setActiveTab("program")}>
-              Program
+              5-Day Split
+            </button>
+            <button style={tabStyle("machine")} onClick={() => setActiveTab("machine")}>
+              3-Day Machine
+            </button>
+            <button style={tabStyle("mobility")} onClick={() => setActiveTab("mobility")}>
+              Mobility
             </button>
             <button style={tabStyle("guide")} onClick={() => setActiveTab("guide")}>
-              Research guide
+              Research
             </button>
           </div>
         </div>
@@ -946,6 +954,29 @@ export default function WorkoutProgram() {
             <p style={{ fontSize: 11, color: C.dim, textAlign: "center", marginTop: 20, lineHeight: 1.6 }}>
               Sources: Plotkin et al. 2022 · Chaves et al. 2024 · Refalo et al. 2023/2025 · Coleman et al. 2024/2025 · Pelland et al. 2026 · Mănescu et al. 2025 · Kaczmarek et al. 2025 · Easow et al. 2025
             </p>
+          </div>
+        )}
+
+        {/* ══ 3-DAY MACHINE TAB ══ */}
+        {activeTab === "machine" && (
+          <div style={{ paddingTop: 8 }}>
+            <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.6, padding: "12px 16px 0" }}>
+              A lighter machine- and cable-based alternative to the 5-day split — useful for
+              deload weeks, travel, or busy stretches. Run it 3 non-consecutive days instead
+              of the main program, not on top of it.
+            </p>
+            <MachineSplit3Day />
+          </div>
+        )}
+
+        {/* ══ MOBILITY TAB ══ */}
+        {activeTab === "mobility" && (
+          <div style={{ paddingTop: 8 }}>
+            <p style={{ fontSize: 13, color: C.muted, lineHeight: 1.6, padding: "12px 16px 0" }}>
+              A daily 8–10 minute morning flow to keep hips, spine, shoulders, and ankles
+              mobile. Dynamic movement — do it any morning, and especially before training days.
+            </p>
+            <MorningMobilityFlow />
           </div>
         )}
       </div>

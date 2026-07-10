@@ -150,7 +150,6 @@ export default function MachineSplit3Day() {
 
   const selectDay = (id) => {
     setActiveDay(id);
-    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const current = DAYS.find((d) => d.id === activeDay);
@@ -241,27 +240,24 @@ export default function MachineSplit3Day() {
 }
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 
 .ms-root {
-  --bg: #10151c;
-  --panel: #171e28;
-  --panel-2: #1d2733;
-  --line: #2a3644;
-  --text: #eef3f8;
-  --muted: #7d8a99;
-  --iron: #f4a92c;
-  --recover: #34d6b6;
-  --burn: #ff5f52;
+  --bg: #0F1008;
+  --panel: #1C1E0F;
+  --panel-2: #181A0C;
+  --line: #2A2D18;
+  --text: #F5F5E8;
+  --muted: #8A8F6A;
+  --iron: #E8FF47;
+  --recover: #7EFF9A;
+  --burn: #FF9A47;
   --shadow: 0 10px 30px rgba(0,0,0,.35);
 
-  background:
-    radial-gradient(1100px 600px at 80% -10%, rgba(244,169,44,.06), transparent 60%),
-    var(--bg);
+  background: transparent;
   color: var(--text);
-  font-family: 'Inter', sans-serif;
-  min-height: 100vh;
-  padding: 28px 16px 64px;
+  font-family: 'DM Sans', sans-serif;
+  padding: 4px 16px 32px;
   line-height: 1.5;
 }
 .ms-root * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -269,7 +265,7 @@ const CSS = `
 
 .ms-root header { margin-bottom: 22px; }
 .ms-root .eyebrow {
-  font-family: 'Saira Condensed', sans-serif;
+  font-family: 'Space Mono', monospace;
   letter-spacing: .28em;
   font-size: .72rem;
   text-transform: uppercase;
@@ -278,12 +274,12 @@ const CSS = `
   margin-bottom: 6px;
 }
 .ms-root h1 {
-  font-family: 'Saira Condensed', sans-serif;
+  font-family: 'Space Mono', monospace;
   font-weight: 700;
-  font-size: clamp(2.4rem, 9vw, 3.6rem);
-  line-height: .95;
-  letter-spacing: .01em;
-  text-transform: uppercase;
+  font-size: 1.4rem;
+  line-height: 1.1;
+  letter-spacing: -.01em;
+  text-transform: none;
 }
 .ms-root h1 span { color: var(--muted); }
 .ms-root .sub { color: var(--muted); font-size: .9rem; margin-top: 10px; max-width: 52ch; }
@@ -291,17 +287,14 @@ const CSS = `
 .ms-root .tabs {
   display: flex;
   gap: 8px;
-  margin: 24px 0 20px;
-  position: sticky;
-  top: 8px;
-  z-index: 5;
+  margin: 18px 0 20px;
 }
 .ms-root .tab {
   flex: 1;
   background: var(--panel);
   border: 1px solid var(--line);
   color: var(--muted);
-  font-family: 'Saira Condensed', sans-serif;
+  font-family: 'Space Mono', monospace;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: .06em;
@@ -315,7 +308,7 @@ const CSS = `
 }
 .ms-root .tab small {
   display: block;
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   letter-spacing: 0;
   text-transform: none;
@@ -346,7 +339,7 @@ const CSS = `
 .ms-root .block-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .ms-root .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
 .ms-root .block-title {
-  font-family: 'Saira Condensed', sans-serif;
+  font-family: 'Space Mono', monospace;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .1em;
@@ -403,7 +396,7 @@ const CSS = `
 }
 .ms-root .name .tag.emph { color: var(--iron); border-color: rgba(244,169,44,.4); }
 .ms-root .prescription {
-  font-family: 'Saira Condensed', sans-serif;
+  font-family: 'Space Mono', monospace;
   font-weight: 600;
   font-size: .92rem;
   color: var(--text);
@@ -430,7 +423,7 @@ const CSS = `
 .ms-root .resetbar { text-align: center; margin-top: 18px; }
 .ms-root .reset {
   background: none; border: 1px solid var(--line); color: var(--muted);
-  font-family: 'Inter', sans-serif; font-size: .8rem;
+  font-family: 'DM Sans', sans-serif; font-size: .8rem;
   padding: 8px 16px; border-radius: 20px; cursor: pointer;
   transition: all .15s ease;
 }
