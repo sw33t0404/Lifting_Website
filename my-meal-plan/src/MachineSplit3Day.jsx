@@ -2,7 +2,10 @@ import React, { useState } from "react";
 
 /**
  * MachineSplit3Day
- * A self-contained 3-day, machine-based full-body hypertrophy split card.
+ * A self-contained 3-day, machine-based full-body split — rebalanced for
+ * EQUAL development across all muscle groups (no chest/bicep bias).
+ * Every muscle is trained 3x/week at matched volume (~9 sets/week each),
+ * with exercises varied across days to hit each muscle from new angles.
  * - Tab between days, tap any row to check it off (in-memory state).
  * - Styles + fonts are embedded, so it drops into any project with no
  *   Tailwind / CSS setup required.
@@ -12,27 +15,28 @@ const DAYS = [
   {
     id: 1,
     label: "Day 1",
-    focus: "Quads + Chest",
+    focus: "Full Body A",
     stretch: {
       note: "~6 min",
       items: [
-        { name: "Leg swings, front-to-back", rx: "10 / leg" },
-        { name: "Bodyweight squat to stand", rx: "10 reps" },
-        { name: "Doorway chest stretch", rx: "30s / side" },
         { name: "Cat-cow", rx: "8 reps" },
+        { name: "Leg swings, front-to-back", rx: "10 / leg" },
+        { name: "World's greatest stretch", rx: "4 / side" },
         { name: "Arm circles", rx: "15 / way" },
+        { name: "Bodyweight squat to stand", rx: "10 reps" },
       ],
     },
     workout: {
-      note: "7 movements",
+      note: "8 movements",
       items: [
-        { name: "Hack Squat", tag: "Machine", rx: "2 × 6-8" },
-        { name: "Machine Chest Press", tag: "Chest", emph: true, rx: "2 × 6-8" },
-        { name: "Leg Extension", tag: "Machine", rx: "2 × 8-12" },
-        { name: "Pec Deck Fly", tag: "Chest", emph: true, rx: "2 × 8-10" },
-        { name: "Lat Pulldown", tag: "Cable", rx: "2 × 6-8" },
-        { name: "Machine Preacher Curl", tag: "Biceps", emph: true, rx: "2 × 8-10" },
-        { name: "Seated Calf Raise", tag: "Machine", rx: "2 × 12-15" },
+        { name: "Hack Squat", tag: "Quads", rx: "3 × 10-12" },
+        { name: "Seated Leg Curl", tag: "Hams", rx: "3 × 10-12" },
+        { name: "Machine Chest Press", tag: "Chest", rx: "3 × 8-12" },
+        { name: "Lat Pulldown", tag: "Back", rx: "3 × 8-12" },
+        { name: "Machine Shoulder Press", tag: "Delts", rx: "3 × 8-12" },
+        { name: "Machine Preacher Curl", tag: "Biceps", rx: "3 × 10-12" },
+        { name: "Rope Tricep Pushdown", tag: "Triceps", rx: "3 × 10-12" },
+        { name: "Seated Calf Raise", tag: "Calves", rx: "3 × 12-15" },
       ],
     },
     cardio: {
@@ -46,27 +50,28 @@ const DAYS = [
   {
     id: 2,
     label: "Day 2",
-    focus: "Hams + Back",
+    focus: "Full Body B",
     stretch: {
       note: "~6 min",
       items: [
-        { name: "Standing hamstring reach", rx: "30s / leg" },
         { name: "Hip flexor lunge stretch", rx: "30s / side" },
-        { name: "Figure-4 glute stretch", rx: "30s / side" },
         { name: "Thoracic rotations", rx: "8 / side" },
+        { name: "Leg swings, side-to-side", rx: "10 / leg" },
         { name: "Band pull-aparts", rx: "15 reps" },
+        { name: "Deep squat hold", rx: "30s" },
       ],
     },
     workout: {
-      note: "7 movements",
+      note: "8 movements",
       items: [
-        { name: "Leg Press", tag: "Machine", rx: "2 × 10-12" },
-        { name: "Seated Leg Curl", tag: "Machine", rx: "2 × 10-12" },
-        { name: "Seated Cable Row", tag: "Cable", rx: "2 × 8-12" },
-        { name: "Incline Chest Press", tag: "Chest", emph: true, rx: "2 × 8-12" },
-        { name: "Close-Grip Lat Pulldown", tag: "Cable", rx: "2 × 8-12" },
-        { name: "Cable Hammer Curl", tag: "Biceps", emph: true, rx: "2 × 12" },
-        { name: "Rope Tricep Pushdown", tag: "Cable", rx: "2 × 12" },
+        { name: "Leg Press", tag: "Quads", rx: "3 × 10-12" },
+        { name: "Hip Thrust Machine", tag: "Glutes", rx: "3 × 10-12" },
+        { name: "Incline Chest Press", tag: "Chest", rx: "3 × 8-12" },
+        { name: "Seated Cable Row", tag: "Back", rx: "3 × 8-12" },
+        { name: "Cable Lateral Raise", tag: "Delts", rx: "3 × 12-15" },
+        { name: "Cable Hammer Curl", tag: "Biceps", rx: "3 × 10-12" },
+        { name: "Overhead Rope Extension", tag: "Triceps", rx: "3 × 10-12" },
+        { name: "Standing Calf Raise", tag: "Calves", rx: "3 × 12-15" },
       ],
     },
     cardio: {
@@ -80,27 +85,28 @@ const DAYS = [
   {
     id: 3,
     label: "Day 3",
-    focus: "Full + Delts",
+    focus: "Full Body C",
     stretch: {
       note: "~6 min",
       items: [
         { name: "Cross-body shoulder stretch", rx: "30s / side" },
-        { name: "Overhead tricep stretch", rx: "30s / side" },
-        { name: "Doorway chest stretch", rx: "30s / side" },
+        { name: "World's greatest stretch", rx: "4 / side" },
         { name: "Standing quad stretch", rx: "30s / side" },
-        { name: "Wrist & shoulder circles", rx: "30s" },
+        { name: "90/90 hip switches", rx: "8 total" },
+        { name: "Overhead tricep stretch", rx: "30s / side" },
       ],
     },
     workout: {
-      note: "7 movements",
+      note: "8 movements",
       items: [
-        { name: "Smith Machine Squat", tag: "Machine", rx: "2 × 8-12" },
-        { name: "Machine Shoulder Press", tag: "Machine", rx: "2 × 8-12" },
-        { name: "Seated Leg Curl", tag: "Machine", rx: "2 × 10-12" },
-        { name: "Cable Chest Fly", tag: "Chest", emph: true, rx: "2 × 12" },
-        { name: "Cable Lateral Raise", tag: "Cable", rx: "2 × 12-15" },
-        { name: "Machine Bicep Curl", tag: "Biceps", emph: true, rx: "2 × 10-12" },
-        { name: "Rope Overhead Tricep Ext.", tag: "Cable", rx: "2 × 12" },
+        { name: "Smith Machine Squat", tag: "Quads", rx: "3 × 8-12" },
+        { name: "Seated Leg Curl", tag: "Hams", rx: "3 × 10-12" },
+        { name: "Pec Deck Fly", tag: "Chest", rx: "3 × 10-12" },
+        { name: "Close-Grip Lat Pulldown", tag: "Back", rx: "3 × 8-12" },
+        { name: "Reverse Pec Deck", tag: "Rear Delt", rx: "3 × 12-15" },
+        { name: "Machine Bicep Curl", tag: "Biceps", rx: "3 × 10-12" },
+        { name: "Tricep Dip Machine", tag: "Triceps", rx: "3 × 10-12" },
+        { name: "Leg Press Calf Raise", tag: "Calves", rx: "3 × 12-15" },
       ],
     },
     cardio: {
@@ -160,14 +166,14 @@ export default function MachineSplit3Day() {
       <style>{CSS}</style>
       <div className="wrap">
         <header>
-          <div className="eyebrow">Summer Size Block · Machine Focus</div>
+          <div className="eyebrow">Rebuild Block · Balanced Full Body</div>
           <h1>
             Full Body <span>×3</span>
           </h1>
           <p className="sub">
-            Machine and cable driven for constant tension and safe proximity to failure.
-            Chest and biceps carry extra volume every session. Train on 3 non-consecutive
-            days — Mon / Wed / Fri works well.
+            Machine and cable driven for constant tension and safe proximity to failure. Every
+            muscle group gets equal volume and 3× weekly frequency — no priorities. Train on 3
+            non-consecutive days; Mon / Wed / Fri works well.
           </p>
         </header>
 
@@ -208,9 +214,7 @@ export default function MachineSplit3Day() {
                         </span>
                         <span className="name">
                           {item.name}
-                          {item.tag && (
-                            <span className={`tag${item.emph ? " emph" : ""}`}>{item.tag}</span>
-                          )}
+                          {item.tag && <span className="tag">{item.tag}</span>}
                         </span>
                         <span className="prescription">{item.rx}</span>
                       </li>
@@ -224,10 +228,10 @@ export default function MachineSplit3Day() {
         </section>
 
         <footer>
-          <b>Keep cardio moderate.</b> Since the goal right now is building size, 15-20 min of
-          steady-state after lifting 3× a week is plenty — enough for conditioning and a bit of
-          a lean-out without cutting into recovery. If you start dropping weight too fast, trim
-          the cardio before you trim the food.
+          <b>Even volume, even growth.</b> Each muscle group lands around 9 hard sets a week at
+          matched frequency — the balanced dose for overall size coming back from a layoff. Keep
+          most sets 1-2 reps shy of failure, push the last set of each movement, and add a little
+          weight each week as your strength returns.
         </footer>
 
         <div className="resetbar">
@@ -401,7 +405,6 @@ const CSS = `
   margin-left: 6px;
   vertical-align: middle;
 }
-.ms-root .name .tag.emph { color: var(--iron); border-color: rgba(244,169,44,.4); }
 .ms-root .prescription {
   font-family: 'Saira Condensed', sans-serif;
   font-weight: 600;
